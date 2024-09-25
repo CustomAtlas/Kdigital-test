@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer' as dev;
 import 'dart:math';
 
 import 'package:kdigital_test/src/data/models/character.dart';
-import 'package:kdigital_test/src/data/repository/characters_repository.dart';
+import 'package:kdigital_test/src/domain/repository/characters_repository.dart';
 import 'package:http/http.dart';
 
 class CharactersRepositoryImpl implements CharactersRepository {
@@ -13,17 +14,16 @@ class CharactersRepositoryImpl implements CharactersRepository {
 
   @override
   Future<List<Character>?> getCharacters(int page) async {
-    var client = Client();
     final charResult = await client.get(
       Uri.parse("https://rickandmortyapi.com/api/character/?page=$page"),
     );
     final jsonMap = await json.decode(charResult.body) as Map<String, dynamic>;
 
     final bool showMockedError = Random().nextBool();
-    print("Kdigital test log: showMockedError = $showMockedError");
+    dev.log("Kdigital test log: showMockedError = $showMockedError");
     if (showMockedError) {
       return Future.delayed(
-        const Duration(seconds: 5),
+        const Duration(seconds: 2),
         () => null,
       );
     }
